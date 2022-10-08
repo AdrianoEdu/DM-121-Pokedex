@@ -1,6 +1,17 @@
 const getPokemonUrlById = id => `https://pokeapi.co/api/v2/pokemon/${id}`
 const getPokemonUrlByName = name => `https://pokeapi.co/api/v2/pokemon/${name}`
 
+const initialKanto = 1, lastKanto = 151;
+const initialJohto = 152, lastJohto = 251;
+const initialHoen = 252, lastHoen = 386;
+const initialSinoh = 387, lastSinoh = 493;
+const initialUnova = 494, lastUnova = 649;
+const initialKalos = 650, lastKalos = 721;
+const initialAlola = 722, lastAlola = 809;
+const initialGalar = 810, lastGalar = 905;
+
+const pokeRegions = ["Kanto", "Johto", "Hoen", "Sinoh", "Unova", "Kalos", "Alola", "Galar"];
+
 const fetchPokemon = (begin, last) => {
     const pokemonPromises = []
     for (let i = begin; i <= last; i++) {
@@ -15,8 +26,8 @@ const fetchPokemon = (begin, last) => {
             }, '')
 
             const ul = document.querySelector('[data-js="pokedex"]')
-            ul.innerHTML = listPokemons            
-    })  
+            ul.innerHTML = listPokemons
+        })
 }
 
 const getPokemonIdFormatted = id => {
@@ -33,59 +44,59 @@ const getPokemonIdFormatted = id => {
 
 function removeAllChild(parent) {
     while (parent.firstChild) {
-      parent.removeChild(parent.firstChild)
+        parent.removeChild(parent.firstChild)
     }
 }
 
 async function onSearch() {
     const pokedex = document.querySelector(".pokedex");
     removeAllChild(pokedex);
-  
+
     var pokeName = document.getElementById("pokeSearch");
     if (pokeName.value === "") {
         await onSearchRegion()
     } else {
-      const pokemon = await fetch(getPokemonUrlByName(pokeName.value.toLowerCase())).then(response => response.json())
-      let li= createPokemon(pokemon);
-      console.log(li)
-      const ul = document.querySelector('[data-js="pokedex"]')
-      ul.innerHTML = li
+        const pokemon = await fetch(getPokemonUrlByName(pokeName.value.toLowerCase())).then(response => response.json())
+        let li = createPokemon(pokemon);
+        console.log(li)
+        const ul = document.querySelector('[data-js="pokedex"]')
+        ul.innerHTML = li
     }
 }
 
-async function onSearchRegion()
-{
+async function onSearchRegion() {
     const pokedex = document.querySelector(".pokedex");
     removeAllChild(pokedex);
 
     var pokeRegion = document.getElementById("pokeSearchRegion");
 
-    if (pokeRegion.value === "") {
-        fetchPokemon(1,905)
-    }
-    else if (pokeRegion.value === "Kanto" || pokeRegion.value === "kanto" || pokeRegion.value === "KANTO") {
-        fetchPokemon(1,151)
-    } 
-    else if (pokeRegion.value === "Johto" || pokeRegion.value === "johto" || pokeRegion.value === "JOHTO") {
-        fetchPokemon(152,251);
-    }
-    else if (pokeRegion.value === "Hoenn" || pokeRegion.value === "hoenn" || pokeRegion.value === "HOENN") {
-        fetchPokemon(252,386);
-    }
-    else if (pokeRegion.value === "Sinnoh" || pokeRegion.value === "sinnoh" || pokeRegion.value === "SINNOH") {
-        fetchPokemon(387,493);
-    }
-    else if (pokeRegion.value === "Unova" || pokeRegion.value === "unova" || pokeRegion.value === "UNOVA") {
-        fetchPokemon(494,649);
-    }
-    else if (pokeRegion.value === "Kalos" || pokeRegion.value === "kalos" || pokeRegion.value === "KALOS") {
-        fetchPokemon(650,721);
-    }
-    else if (pokeRegion.value === "Alola" || pokeRegion.value === "alola" || pokeRegion.value === "ALOLA") {
-        fetchPokemon(722,809);
-    }
-    else if (pokeRegion.value === "Galar" || pokeRegion.value === "galar" || pokeRegion.value === "GALAR") {
-        fetchPokemon(810,905);
+    switch (pokeRegion.value.toLowerCase()) {
+        case pokeRegions[0].toLowerCase():
+            fetchPokemon(initialKanto, lastKanto);
+            break;
+        case pokeRegions[1].toLowerCase():
+            fetchPokemon(initialJohto, lastJohto);
+            break;
+        case pokeRegions[2].toLowerCase():
+            fetchPokemon(initialHoen, lastHoen);
+            break;
+        case pokeRegions[3].toLowerCase():
+            fetchPokemon(initialSinoh, lastSinoh);
+            break;
+        case pokeRegions[4].toLowerCase():
+            fetchPokemon(initialUnova, lastUnova);
+            break;
+        case pokeRegions[5].toLowerCase():
+            fetchPokemon(initialKalos, lastKalos);
+            break;
+        case pokeRegions[6].toLowerCase():
+            fetchPokemon(initialAlola, lastAlola);
+            break;
+        case pokeRegions[7].toLowerCase():
+            fetchPokemon(initialGalar, lastGalar);
+            break;
+        default:
+            fetchPokemon(initialKanto, lastGalar)
     }
 }
 
@@ -115,15 +126,14 @@ const createPokemon = (pokemon) => {
 
     li.appendChild(p);
     li.appendChild(image);
-    
+
     li.appendChild(h2);
     liHead.appendChild(li);
 
     return liHead.innerHTML;
 }
 
-const createMoveSetPokemon = (attack) => 
-{
+const createMoveSetPokemon = (attack) => {
     var li = document.createElement("li");
     var p = document.createElement(p);
     p.innerHTML = attack.name
@@ -133,4 +143,4 @@ const createMoveSetPokemon = (attack) =>
     return li.innerHTML;
 }
 
-fetchPokemon(1,905)
+fetchPokemon(1, 905)
